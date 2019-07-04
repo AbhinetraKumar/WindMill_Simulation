@@ -1,0 +1,346 @@
+#include<gl\glut.h>
+#include<stdio.h>
+#include<conio.h>
+#include<process.h>
+#define M_SIDE1 20
+#define M_SIDE2 21
+#define M_BACK  22
+#define M_FRONT 23
+#define M_CUSTOM 24
+#define SIZE 500
+float x_angle = 0.0;
+float y_angle = 0.0;
+float z_angle = 0.0;
+float camera_angle=0.0;
+float c=1.0;
+
+GLfloat pos[] = { 0.0, 0.0, -10.0, 1.0 };
+GLfloat white[] = { 2.5, 2.5, 6.0, 6.0 };
+GLfloat red[] = { 0.7, .4, 0.0, 1.0 };
+GLfloat deep_blue[] = { 0.3, 0.3, 0.9, 1.0 };
+GLfloat shiny[] = { 50.0 };
+GLfloat dull[] = { 0.0 };
+GLUquadricObj *Cylinder;
+enum { X, Y, Z } axis = X;
+
+void change_view (int sel)
+{
+	switch (sel)
+	{
+		/*case M_CUSTOM:{printf("ENTER VIEWANGLE:");
+                       scanf("%f",&camera_angle);};
+                       break;*/
+		case M_SIDE1: {camera_angle=90;}
+                       break;
+		case M_SIDE2: camera_angle=-90;
+                      break;
+		case M_BACK: camera_angle=180;
+                      break;
+		case M_FRONT:camera_angle=0;
+		default: break;
+	}
+}
+
+void initialize_menu (void)
+{
+	glutCreateMenu(change_view );
+	glutAddMenuEntry("RIGHT VIEW", 20);
+	glutAddMenuEntry("LEFT VIEW", 21);
+	glutAddMenuEntry("BACK VIEW", 22);
+	glutAddMenuEntry("FRONT VIEW", 23);
+	//glutAddMenuEntry("CUSTOM VIEW", 24);
+	glutAttachMenu(GLUT_MIDDLE_BUTTON);
+}
+
+
+
+void mouse_button (int button, int state, int x, int y)
+{
+	if (button == GLUT_LEFT_BUTTON )
+	{
+		axis=Z; c=c+0.4;
+        	printf("WIND SPEED INCREASE\t SPEED= %f Km/Hr\n\n",c*1.5);
+        	glutPostRedisplay();
+	}
+    	else if (button == GLUT_RIGHT_BUTTON )
+	{
+        	axis = Z; c=c-0.4;
+        	printf("WIND SPEED DECREASE\t SPEED= %f Km/Hr\n\n",c*1.5);
+        	glutPostRedisplay();
+	}
+}
+
+void spin(void)
+{
+     switch (axis)
+      {
+           case X: x_angle += 1.0;
+                   break;
+           case Y: y_angle += 1.0;
+                   break;
+           case Z: z_angle += c ;
+                   break;
+           default: break;
+      }
+      glutPostRedisplay();
+}
+
+void setOrthographicProjection()
+ {
+	 glMatrixMode(GL_PROJECTION);
+	 glPushMatrix();
+	 glLoadIdentity();
+	 gluOrtho2D(0,800,0,600);
+	 glClearColor(1.0,1.0,1.0,1.0);
+	 glMatrixMode(GL_MODELVIEW);
+ }
+
+void display1()
+{  
+ 
+	char a1[]="         WIND MILL SIMULATION ";
+    	char a2[]="					                using openGL";
+    	char a4[]="submitted by";
+    	char a5[]="  ABHINETRA KUMAR(1SG16CS001)		          													                  ADITYA DEEP(1SG16CS004)";  
+    	char a7[]="Under the guidance of";
+    	char a8[]="					Dr. Kamalakshi Naganna                                                                                                  Mrs Anuradha Badige";
+   	char a9[]="					Professor & Incharge HOD                                                                                              Assistant Professor";
+    	char a11[]="Press z or Z to watch 'Press 1. Left click for anticlockwise 2.Right Click for Clockwise rotation 3. Middle button for menu'";
+    	int i;         
+    	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    	setOrthographicProjection();
+    	glPushMatrix();
+    	glLoadIdentity();
+    	glClearColor(20.0/256.0,26.0/256.0,26.0/256.0,0.0);
+    	glColor3f(256.0/256.0,100.0/256.0,0.0);
+    	glRectf(0,0,800,10);
+    	glColor3f(256.0/256.0,100.0/256.0,0.0);
+    	glRectf(0,35,800,45);
+    	glColor3f(250.0/256.0,200.0/255.0,1.0);
+    	glColor3f(256.0/256.0,100.0/256.0,0.0);
+        glRectf(0,0,7,700);
+        glColor3f(256.0/256.0,100.0/256.0,0.0);
+        glRectf(25,0,32,700);
+        glColor3f(0.2,0.8,0.2);
+        glRectf(10,15,22,30);
+        glRectf(10,517,22,532);
+        glRectf(10,544,22,559);
+        glRectf(10,571,22,586);
+        glColor3f(256.0/256.0,100.0/256.0,0.0);
+        glRectf(768,0,775,700);
+        glColor3f(256.0/256.0,100.0/256.0,0.0);
+        glRectf(792,0,810,700);
+        glColor3f(250.0/256.0,200.0/255.0,1.0);
+        glColor3f(256.0/256.0,100.0/256.0,0.0);
+        glRectf(0,590,800,710);
+        glColor3f(256.0/256.0,100.0/256.0,0.0);
+        glRectf(0,563,800,570);
+        glColor3f(0.2,0.8,0.2);
+        glRectf(779,15,789,33);
+        glRectf(779,50,789,65);
+        glRectf(779,75,789,90);
+        glRectf(779,571,789,586);
+       
+        glColor3f(1.0,0.5,0.0);
+        glRasterPos2f(270.0,500.0);
+        for(i=0;i<sizeof(a1);i++)
+                glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24  ,a1[i]);
+        glColor3f(1.0,0.5,0.0);
+        glRasterPos2f(270.0,475.0);
+        for(i=0;i<sizeof(a2);i++)
+                glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24  ,a2[i]);
+       
+        glColor3f(1.0,0.5,0.0);
+        glRasterPos2f(335.0,370.0);
+        for(i=0;i<sizeof(a4);i++)
+                glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24  ,a4[i]);
+       
+        glColor3f(1.0,0.5,0.0);
+        glRasterPos2f(80.0,290.0);
+        for(i=0;i<sizeof(a5);i++)
+                glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24  ,a5[i]);
+       
+        glColor3f(1.0,0.5,0.0);
+        glRasterPos2f(300.0,220.0);
+        for(i=0;i<sizeof(a7);i++)
+                glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24  ,a7[i]);
+       
+        glColor3f(1.0,0.5,0.0);
+        glRasterPos2f(90.0,200.0);
+        for(i=0;i<sizeof(a8);i++)
+                glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24 ,a8[i]);
+ 
+       
+        glColor3f(1.0,0.5,0.0);
+        glRasterPos2f(90.0,180.0);
+        for(i=0;i<sizeof(a9);i++)
+                glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24 ,a9[i]);
+
+        glColor3f(1.0,0.5,0.0);
+        glRasterPos2f(50.0,100.0);
+        for(i=0;i<sizeof(a11);i++)
+                glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24 ,a11[i]);
+  
+        glPopMatrix();
+        glutSwapBuffers();     
+}
+
+void display (void)
+{
+	Cylinder = gluNewQuadric();
+	gluQuadricDrawStyle( Cylinder, GLU_FILL);
+    	gluQuadricNormals( Cylinder, GLU_SMOOTH);
+    	gluQuadricOrientation( Cylinder, GLU_OUTSIDE );
+    	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    	glMatrixMode(GL_MODELVIEW);
+    	glLoadIdentity();
+    	glEnable(GL_TEXTURE_2D);
+
+	//Bottom
+  	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+   	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+   	glMaterialfv(GL_FRONT, GL_AMBIENT, white);
+  	glBegin(GL_QUADS);
+   	glNormal3f(0.0, 1.0f, 0.0f);
+   	glTexCoord2f(0.0f, 0.0f);
+ 	glVertex3f(-25.0,-25.0,-44);
+  	glTexCoord2f(0.0f, 1.0f);
+   	glVertex3f(-25.0,25.0,-44);
+   	glTexCoord2f(1.0f, 1.0f);
+   	glVertex3f(25.0,25.0,-44);
+   	glTexCoord2f(1.0f, 0.0f);
+   	glVertex3f(25.0,-25.0,-44);
+   	glEnd();
+   	glDisable(GL_TEXTURE_2D);
+   	glRotatef(camera_angle,0.0,1.0,0.0);
+   	gluCylinder(Cylinder,.4,.4,4,16,20);
+  	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, red);
+   	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, red);
+   	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shiny);
+   	glPushMatrix();
+   	glutSolidTorus (1.4, 1.4,  6,  6);
+   	glutSolidCube(2.5);
+   	glPushMatrix();
+   	glTranslatef(0.0,-2.0,0.0);
+   	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, red); 
+	
+	//material property for the base of the windmill
+   	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, red);
+   	glPushMatrix();
+   	glRotatef(90.0,1.0,0.0,0.0);
+  	glTranslatef(0.0,0.0,-2.0);
+   	gluCylinder(Cylinder,1.0,1.5,27,50,50);
+   	glPopMatrix();
+   	glPopMatrix();
+   	glRotatef(z_angle, 0.0, 0.0, 1.0);
+   	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, red);
+   	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, white);
+  	glPushMatrix();
+   	glTranslatef(0.0,0.0,1.5);
+   	glutSolidCone(1.5,2.5,50,50);
+   	glPopMatrix();
+   	glPushMatrix();		//blade 1
+  	glTranslatef(0.0,0.0,2.2);
+   	glRotatef(90.0,1.0,0.0,0.0);
+  	glPushMatrix();
+   	glRotatef(120,0.0,1.0,0.0);
+   	glutSolidCone(0.9, 16.0, 15, 15);
+   	glPopMatrix();
+   	glPopMatrix();
+   	glPushMatrix();		//blade 2
+   	glTranslatef(0.0,0.0,2.2);
+   	glRotatef(90.0,1.0,0.0,0.0);
+   	glPushMatrix();
+   	glRotatef(-120,0.0,1.0,0.0);
+   	glutSolidCone(0.9, 16.0, 15, 15);
+   	glPopMatrix();
+  	glPopMatrix();
+  	glPushMatrix();		 //blade 3 
+   	glTranslatef(0.0,0.0,2.2);
+  	glRotatef(90.0,1.0,0.0,0.0);
+   	glutSolidCone(0.9, 16.0, 15, 15);
+   	glPopMatrix();
+   	glLightfv(GL_LIGHT1, GL_POSITION, pos);
+	glutSwapBuffers();
+}
+
+void init (void)
+{
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho(-25.0, 25.0, -25.0, 25.0, -250.0, 250.0);
+        glEnable(GL_LIGHTING);
+        glEnable(GL_LIGHT0);
+        glEnable(GL_LIGHT1);
+        glEnable(GL_NORMALIZE);
+}
+
+void keys(unsigned char key,int x , int y)
+{
+	if(key=='z' || key == 'Z')
+		glutDisplayFunc(display);
+}
+
+void special (int key, int x, int y) 
+{
+
+	switch (key)
+	{
+		case GLUT_KEY_LEFT: {axis = X; camera_angle--;
+			    printf("\n\nVIEW ANGLE= %f", camera_angle);};
+			    glutPostRedisplay();
+			    break;
+		case GLUT_KEY_RIGHT: {axis = Y; camera_angle++;
+			     printf("\n\nVIEW ANGLE= %f", camera_angle);};
+		  	     glutPostRedisplay();
+		  	     break;
+		case GLUT_KEY_UP: c=c+0.4; 
+			  glutPostRedisplay();
+			  break;	
+    	case GLUT_KEY_END: exit(0); 	
+    	case GLUT_KEY_DOWN: {c=c-0.4;};
+  			    glutPostRedisplay();
+		 	    break;
+    	default: break;
+    }
+}
+
+void reshape (int width, int height)
+{
+	GLfloat w, h;
+	glViewport(0, 0, width, height);
+	glMatrixMode(GL_PROJECTION);
+    	glLoadIdentity();
+    	if (width > height)
+	{
+		w = (25.0 * width) / height;
+		h = 25.0;
+	}
+	else
+	{
+		w = 25.0;
+		h = (25.0 * height) / width;
+	}
+	glOrtho(-w, w, -h, h, -250.0, 250.0);
+	glutPostRedisplay();
+ }
+
+
+void main (int argc, char *argv[ ])
+{
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_SINGLE | GLUT_RGB);
+       	glutInitWindowSize(SIZE, SIZE);
+       	glutInitWindowPosition(0, 0);
+       	glutCreateWindow("SIMULATION OF WINDMILL");
+       	glutIdleFunc(spin);
+      	glutDisplayFunc(display1);
+       	glutSpecialFunc(special);
+       	glutMouseFunc(mouse_button);
+       	initialize_menu();
+       	glutReshapeFunc(reshape);
+	init();
+	glutKeyboardFunc(keys);
+	glEnable(GL_DEPTH_TEST);
+	glutMainLoop();
+}
